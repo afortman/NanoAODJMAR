@@ -21,3 +21,9 @@ Note: Do not do a `checkdeps` after checking out the topic. It adds some diction
 ```
 cmsRun test94X_NANO_recluster.py
 ```
+## CRAB recipe :
+
+```
+source /cvmfs/cms.cern.ch/crab3/crab.sh
+python submit_all.py -c  test94X_NANO_recluster.py -d 94X_JMARNANO -f InputDatasets.txt
+```
