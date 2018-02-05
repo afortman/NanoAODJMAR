@@ -100,7 +100,7 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         datatier = job.split('/')[3]
-        requestname = ptbin + '_' + cond
+        requestname = 'NANAODrecluster_' ptbin + '_' + cond
         if len(requestname) > 100: requestname = ''.join((requestname[:100-len(requestname)]).split('_')[:-1])
         print 'requestname = ', requestname
         config.General.requestName = requestname
