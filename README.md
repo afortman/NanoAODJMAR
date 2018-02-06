@@ -21,9 +21,16 @@ Note: Do not do a `checkdeps` after checking out the topic. It adds some diction
 ```
 cmsRun test94X_NANO_recluster.py
 ```
-## CRAB recipe :
+## CRAB recipe to make NANOAOD:
 
 ```
 source /cvmfs/cms.cern.ch/crab3/crab.sh
-python submit_all.py -c  test94X_NANO_recluster.py -d 94X_JMARNANO -f InputDatasets.txt
+python submit_all.py -c  test94X_NANO_recluster.py -d 94X_JMARNANO -f InputMINIAODDatasets.txt
+```
+
+## CRAB recipe to skim existing NANOAOD:
+
+```
+source /cvmfs/cms.cern.ch/crab3/crab.sh
+python submit_all.py -c  PSet.py -d 94X_JMARNANOSkim -f InputNANODatasets.txt
 ```
