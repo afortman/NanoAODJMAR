@@ -106,15 +106,31 @@ def main():
         config.General.requestName = requestname
         config.Data.inputDataset = job
         config.Data.outputDatasetTag = requestname
+
+        if datatier == "USER":
+            requestname = 'ZandJetSkimofNANAODrecluster_' + ptbin + '_' + cond
+            config.JobType.scriptExe = 'crab_script.sh' 
+            config.JobType.inputFiles = [options.cfg ,'crab_script.sh', 'crab_script.py' ,'./haddnano.py', 'keep_and_drop.txt','/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/PromptReco/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'] #hadd nano will not be needed once nano tools are in cmssw                                                                                      
+            config.JobType.sendPythonFolder  = True
+    
+            config.Data.inputDataset = job
+            config.Data.inputDBS = 'phys03'
+            config.Data.splitting = 'FileBased'
+            config.Data.unitsPerJob = 1          
+            config.Data.publication = True
+            config.JobType.outputFiles = [ '94XNanoV0-DYtoLL-histos.root', '94XNanoV0-DYtoLL-nanoTrees.root']
         if datatier == 'MINIAODSIM':
-          config.Data.splitting = 'FileBased'
-          config.Data.unitsPerJob = 1
-          config.Data.publication = True
+            requestname = 'NANAODrecluster_' + ptbin + '_' + cond
+            config.Data.splitting = 'FileBased'
+            config.Data.unitsPerJob = 1
+            config.Data.publication = True
         elif datatier == 'MINIAOD':
-          config.Data.splitting = 'LumiBased'
-          config.Data.lumiMask = options.lumiMask
-          config.Data.unitsPerJob = 200
-          config.Data.publication = True
+            requestname = 'NANAODrecluster_' + ptbin + '_' + cond
+            config.Data.splitting = 'LumiBased'
+            config.Data.lumiMask = options.lumiMask
+            config.Data.unitsPerJob = 200
+            config.Data.publication = True
+        config.General.requestName = requestname
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
         print config
