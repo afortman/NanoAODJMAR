@@ -100,12 +100,7 @@ def main():
         ptbin = job.split('/')[1]
         cond = job.split('/')[2]
         datatier = job.split('/')[3]
-        requestname = 'NANAODrecluster_' + ptbin + '_' + cond
-        if len(requestname) > 100: requestname = ''.join((requestname[:100-len(requestname)]).split('_')[:-1])
-        print 'requestname = ', requestname
-        config.General.requestName = requestname
         config.Data.inputDataset = job
-        config.Data.outputDatasetTag = requestname
 
         if datatier == "USER":
             requestname = 'ZandJetSkimofNANAODrecluster_' + ptbin + '_' + cond
@@ -130,7 +125,10 @@ def main():
             config.Data.lumiMask = options.lumiMask
             config.Data.unitsPerJob = 200
             config.Data.publication = True
+        if len(requestname) > 100: requestname = ''.join((requestname[:100-len(requestname)]).split('_')[:-1])
+        print 'requestname = ', requestname
         config.General.requestName = requestname
+        config.Data.outputDatasetTag = requestname
         print 'Submitting ' + config.General.requestName + ', dataset = ' + job
         print 'Configuration :'
         print config
