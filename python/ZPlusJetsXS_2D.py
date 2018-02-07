@@ -11,7 +11,7 @@ import array
 class ZPlusJetsXS_2D(Module):
     def __init__(self ):
         self.writeHistFile = True
-        self.verbose = False
+        self.verbose = True #False
     def beginJob(self, histFile, histDirName):
         Module.beginJob(self, histFile, histDirName)
         self.ptbinsGen = array.array('d', [  200., 260., 350., 460., 550., 650., 760., 900., 1000., 1100., 1200., 1300., 13000.])
@@ -203,11 +203,12 @@ class ZPlusJetsXS_2D(Module):
             ###### Get gen Z candidate ######
             genleptons = Collection(event, "GenDressedLepton")
             for il,genl in enumerate(genleptons) :
-                goodgen= False
+              
                 if len(genleptons) < 2 or len(genleptons) < il +2 :
                     continue
-                if abs(genl.pdgId) != 13 or  abs(genl.pdgId) != 12 :
+                if abs(genl.pdgId) != 13 and  abs(genl.pdgId) != 11 :
                     continue
+            
                 if self.verbose :
                     print '----'
                     print 'Gen leptons:'
@@ -220,10 +221,16 @@ class ZPlusJetsXS_2D(Module):
                     print '-----'
                     print 'Gen Z:'
                     print self.printP4( Zboson )
+                if goodgen : break
             if goodgen :
                 ###### Get list of gen jets #######
+                allgenjets = list(Collection(event, "GenJetAK8"))
+                if self.verbose:
+                    print '-----'
+                    print 'all genjets:'
+                    self.printCollection( allgenjets )
                 # List of gen jets:
-                genjets = [ x for x in allgenjets if x.p4().Perp() > self.minJetPt * 0.8 and x.p4().DeltaPhi( Zboson ) > self.minDPhiZJet  ]
+                genjets = [ x for x in allgenjets if x.p4().Perp() > self.minJetPt * 0.8 ]#and x.p4().DeltaPhi( Zboson ) > self.minDPhiZJet  ]
                 # List of gen subjets (no direct link from Genjet):
                 gensubjets = list(Collection(event, "SubGenJetAK8"))
                 # Dictionary to hold ungroomed-->groomed for gen
@@ -232,6 +239,7 @@ class ZPlusJetsXS_2D(Module):
                 for igen,gen in enumerate(genjets):
                     gensubjetsMatched = self.getSubjets( p4=gen.p4(),subjets=gensubjets, dRmax=0.8)
                     for isub,sub in enumerate(gensubjetsMatched) : 
+                        print "filling drGenGroomed"
                         self.h_drGenGroomed.Fill( gen.p4().DeltaR( sub ) )
                     genjetsGroomed[gen] = sum( gensubjetsMatched, ROOT.TLorentzVector() ) if len(gensubjetsMatched) > 0 else None
                 
@@ -317,14 +325,14 @@ class ZPlusJetsXS_2D(Module):
         recojets.sort(key=lambda x:x.p4().Perp(),reverse=True)     
         if len(recojets) < 1 : return False
         #print "Event passed selection"
-        if isMC == False :
-            genjets = [None] * len(recojets)
+        if isMC == False or  genjets == None:
+            genjets = [] 
         # List of reco subjets:
         recosubjets = list(Collection(event,"SubJet"))
         # Dictionary to hold reco--> gen matching
-        recoToGen =  None
-        if genjets != None and isMC:
-            recoToGen = matchObjectCollection( recojets, genjets, dRmax=0.05 )
+        #recoToGen =  None
+        #if genjets != None :
+        recoToGen = matchObjectCollection( recojets, genjets, dRmax=0.05 )
         # Dictionary to hold ungroomed-->groomed for reco
         recojetsGroomed = {}        
         # Get the groomed reco jets
@@ -349,7 +357,7 @@ class ZPlusJetsXS_2D(Module):
         # If both reco+gen: "fill"
         # If only reco: "fake"
         # (See below for "misses")
-        if genjets == None and isMC :
+        if genjets == None:
             # This is a fake if there are reco but no gen
             # This in 1D Ungroomed Fake
             self.h_fake_u.Fill(recojets[0].p4().M())
@@ -363,18 +371,21 @@ class ZPlusJetsXS_2D(Module):
                 self.h_fake.Fill(recojetsGroomed[recojets[0]].M() )
                 binNumberFakeg=self.backgroundDistribution.GetGlobalBinNumber( recojets[0].p4().Perp(), recojetsGroomed[recojets[0]].M()  )
                 self.h_fake_2d.Fill( binNumberFakeg )
-            return True
+            #return True
         for reco,gen in recoToGen.iteritems():
             recoSD = recojetsGroomed[reco]
             if reco == None :
                 continue
             # Always fill the ungroomed det    
+            print "filling recojet kinematics"
             self.h_reco_u.Fill( reco.p4().M() )    
             self.h_recojetpt.Fill(   reco.p4().Perp() )
             self.h_recojeteta.Fill(  reco.p4().Eta()  )
             self.h_recojetphi.Fill(  reco.p4().Phi()  )
+            self.h_recojetmass.Fill( reco.p4().M()  )
            
-            #2D UnGroomed                                                                                                                                                        
+            #2D UnGroomed                                               
+                                                                                                         
             binNumberRecou=self.detectorDistribution.GetGlobalBinNumber(reco.p4().Perp(), reco.p4().M() )
             self.h_reco_2d_u.Fill(binNumberRecou)
             if recoSD != None :
