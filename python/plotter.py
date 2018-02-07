@@ -178,7 +178,7 @@ def printPlot(nameSelection , plotdir, title, CanvasName, XYrange, Ymax, histofA
             words1.Draw()
 
         
-        words1b = ROOT.TLatex(0.72,0.816," dPhi(reco&gen),Z) > 1.57 , dR(gen,reco) < 0.05")
+        words1b = ROOT.TLatex(0.89,0.79," d\phi(AK8,Z) > 1.57 , dR(gen,reco) < 0.05")
         words1b.SetNDC()
         words1b.SetTextAlign(31)
         words1b.SetTextFont(42)
@@ -186,7 +186,7 @@ def printPlot(nameSelection , plotdir, title, CanvasName, XYrange, Ymax, histofA
         words1b.SetLineWidth(2)
         words1b.Draw()
 
-        words2b = ROOT.TLatex(0.69,0.716,"AK8 Pt > 200 GeV")
+        words2b = ROOT.TLatex(0.89,0.716,"AK8 P_{t} > 200 GeV")
         words2b.SetNDC()
         words2b.SetTextAlign(31)
         words2b.SetTextFont(42)
@@ -194,7 +194,7 @@ def printPlot(nameSelection , plotdir, title, CanvasName, XYrange, Ymax, histofA
         words2b.SetLineWidth(2)
         words2b.Draw()
 
-        words3b = ROOT.TLatex(0.69,0.616,"Tight Leps mu(el)(0+1) Pt > 30(80)(100) GeV,  Zmass 80-102 GeV")
+        words3b = ROOT.TLatex(0.89,0.656,"2 Leptons mu(el)(0+1) Pt > 30(80)(100) GeV, Z 80-102 GeV")
         words3b.SetNDC()
         words3b.SetTextAlign(31)
         words3b.SetTextFont(42)
@@ -204,7 +204,7 @@ def printPlot(nameSelection , plotdir, title, CanvasName, XYrange, Ymax, histofA
       
 
                 
-        leg.AddEntry( histofAllMC, 'DYtoLL-M-50(2017)', 'f')
+        leg.AddEntry( histofAllMC, 'DY', 'f')
 
 
         leg.Draw('same')

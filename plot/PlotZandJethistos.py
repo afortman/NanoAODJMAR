@@ -4,7 +4,7 @@ import json
 import array as array
 from optparse import OptionParser
 import ROOT
-from PhysicsTools.NanoAODJMAR.plotter import *
+from PhysicsTools.NanoAODTools.plotter import *
 
 
 
@@ -47,42 +47,42 @@ massnames = ['reco', 'fake', 'miss', 'gen']
 znames = ['zpt', 'zeta', 'zphi', 'zmass']
 
 titles = [
-['h_reco' , 'Reconstructed AK8 SD Jet Mass (GeV)'],
-['h_reco_2d' , 'Reconstructed AK8 SD Jet Mass (GeV)'],
-['h_reco_u' , 'Reconstructed AK8 Ungroomed Jet Mass (GeV)'],
-['h_gen' , 'Generated AK8 SD Jet Mass (GeV)'],
-['h_gen_u' , 'Generated AK8 Ungroomed Jet Mass (GeV)'],
+#['h_reco' , 'Reconstructed AK8 SD Jet Mass (GeV)'],
+#['h_reco_2d' , 'Reconstructed AK8 SD Jet Mass (GeV)'],
+#['h_reco_u' , 'Reconstructed AK8 Ungroomed Jet Mass (GeV)'],
+#['h_gen' , 'Generated AK8 SD Jet Mass (GeV)'],
+#['h_gen_u' , 'Generated AK8 Ungroomed Jet Mass (GeV)'],
 ['h_fake' , 'Reconstructed  Fake AK8 SD Jet Mass (GeV)'],
 ['h_fake_u' , 'Reconstructed Fake AK8 Ungroomed Jet Mass (GeV)'],
-['h_miss' , 'Missed Generated AK8 SD Jet Mass (GeV)'],
-['h_miss_u' , 'Missed Generated AK8 Ungroomed Jet Mass (GeV)'],
-['h_lep0pt' , 'Lepton 0 $P_{T}$ (GeV)'],
+#['h_miss' , 'Missed Generated AK8 SD Jet Mass (GeV)'],
+#['h_miss_u' , 'Missed Generated AK8 Ungroomed Jet Mass (GeV)'],
+['h_lep0pt' , 'Lepton 0 P_{T} (GeV)'],
 ['h_lep0eta' , 'Lepton 0 \eta'],
 ['h_lep0ephi' , 'Lepton 0 \phi'],
-['h_lep1pt' , 'Lepton 1 $P_{T}$ (GeV)'],
+['h_lep1pt' , 'Lepton 1 P_{T} (GeV)'],
 ['h_lep1eta' , 'Lepton 1 \eta'],
 ['h_lep1phi' , 'Lepton 1 \phi'],
 
 
-['zpt' , 'Leptonic Z candidate $P_{T}$ (GeV)'],
+['zpt' , 'Leptonic Z candidate P_{T} (GeV)'],
 ['zmass' , 'Leptonic Z candidate Mass (GeV)'],
 ['zeta' , 'Leptonic Z candidate \eta '],
 ['zphi' , 'Leptonic Z candidate \phi '],
 
-['h_genjetpt' , 'Generated AK8 SD Jet $P_{T}$ (GeV)'],
-['h_genjetphi' , 'Generated AK8 SD Jet \phi (GeV)'],
-['h_genjeteta' , 'Generated AK8 SD Jet \eta (GeV)'],
-['h_genjetmass' , 'Generated AK8 SD Jet Mass (GeV)'],
+#['h_genjetpt' , 'Generated AK8 SD Jet $P_{T}$ (GeV)'],
+#['h_genjetphi' , 'Generated AK8 SD Jet \phi (GeV)'],
+#['h_genjeteta' , 'Generated AK8 SD Jet \eta (GeV)'],
+#['h_genjetmass' , 'Generated AK8 SD Jet Mass (GeV)'],
 
 
-['recojetpt' , 'Reconstructed AK8 SD Jet $P_{T}$ (GeV)'],
-['h_recojetphi' , 'Reconstructed  AK8 SD Jet \phi (GeV)'],
-['h_recojeteta' , 'Reconstructed  AK8 SD Jet \eta (GeV)'],
-['h_recojetmass' , 'Reconstructed  AK8 SD Jet Mass (GeV)'],
+#['recojetpt' , 'Reconstructed AK8 SD Jet $P_{T}$ (GeV)'],
+#['h_recojetphi' , 'Reconstructed  AK8 SD Jet \phi (GeV)'],
+#['h_recojeteta' , 'Reconstructed  AK8 SD Jet \eta (GeV)'],
+#['h_recojetmass' , 'Reconstructed  AK8 SD Jet Mass (GeV)'],
 
 
-['drGenReco' , ' \Delta R(genJet,recoJet) '],
-['drGenGroomed' , ' \Delta R(genJet,recoSDJet) ']
+#['drGenReco' , ' \Delta R(genJet,recoJet) '],
+#['drGenGroomed' , ' \Delta R(genJet,recoSDJet) ']
 
 ]
 
@@ -100,6 +100,14 @@ for k1 in dirList:
     hname =  h.ReadObj().GetName()
     if 'response' in hname : continue
     if 'inning' in hname : continue  
+    if '_2d' in hname : continue
+    if 'jet' in hname : continue
+    if 'drGen' in hname : continue
+    if 'reco' in hname : continue
+    if 'gen' in hname : continue
+    if 'miss' in hname : continue
+    print "hist name is "
+    print hname
     for t in titles :
         if t[0] in hname :
             title = t[1]
@@ -113,7 +121,7 @@ if not options.MC :
     w = xsec * lumi / nevents
 
 
-y_max_scale = 1.3
+y_max_scale = 1.55
 
 rangexs = []
 
