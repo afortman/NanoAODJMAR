@@ -4,8 +4,7 @@ import json
 import array as array
 from optparse import OptionParser
 import ROOT
-from plotter import *
-
+from PhysicsTools.NanoAODJMAR.plotter import *
 
 
 
@@ -40,7 +39,7 @@ if not options.MC :
         dhists[h.GetName()] = h
 
 
-mcFile = ROOT.TFile("./zplusjetsxs_hists_defaultmax100000.root")
+mcFile = ROOT.TFile("./ZandJetSkimofNANAODreclusterDY1JetsToLLM-50-histos.root")
 
 #get histos to plot
 mhists = {}
@@ -49,15 +48,39 @@ znames = ['zpt', 'zeta', 'zphi', 'zmass']
 
 titles = [
 ['h_reco' , 'Reconstructed AK8 SD Jet Mass (GeV)'],
-['gen' , 'Generated AK8 SD Jet Mass (GeV)'],
-['fake' , 'Reconstructed  Fake AK8 SD Jet Mass (GeV)'],
-['miss' , 'Missed Generated AK8 SD Jet Mass (GeV)'],
+['h_reco_2d' , 'Reconstructed AK8 SD Jet Mass (GeV)'],
+['h_reco_u' , 'Reconstructed AK8 Ungroomed Jet Mass (GeV)'],
+['h_gen' , 'Generated AK8 SD Jet Mass (GeV)'],
+['h_gen_u' , 'Generated AK8 Ungroomed Jet Mass (GeV)'],
+['h_fake' , 'Reconstructed  Fake AK8 SD Jet Mass (GeV)'],
+['h_fake_u' , 'Reconstructed Fake AK8 Ungroomed Jet Mass (GeV)'],
+['h_miss' , 'Missed Generated AK8 SD Jet Mass (GeV)'],
+['h_miss_u' , 'Missed Generated AK8 Ungroomed Jet Mass (GeV)'],
+['h_lep0pt' , 'Lepton 0 $P_{T}$ (GeV)'],
+['h_lep0eta' , 'Lepton 0 \eta'],
+['h_lep0ephi' , 'Lepton 0 \phi'],
+['h_lep1pt' , 'Lepton 1 $P_{T}$ (GeV)'],
+['h_lep1eta' , 'Lepton 1 \eta'],
+['h_lep1phi' , 'Lepton 1 \phi'],
+
+
 ['zpt' , 'Leptonic Z candidate $P_{T}$ (GeV)'],
 ['zmass' , 'Leptonic Z candidate Mass (GeV)'],
 ['zeta' , 'Leptonic Z candidate \eta '],
 ['zphi' , 'Leptonic Z candidate \phi '],
+
+['h_genjetpt' , 'Generated AK8 SD Jet $P_{T}$ (GeV)'],
+['h_genjetphi' , 'Generated AK8 SD Jet \phi (GeV)'],
+['h_genjeteta' , 'Generated AK8 SD Jet \eta (GeV)'],
+['h_genjetmass' , 'Generated AK8 SD Jet Mass (GeV)'],
+
+
 ['recojetpt' , 'Reconstructed AK8 SD Jet $P_{T}$ (GeV)'],
-['zphi' , 'Leptonic Z candidate \phi '],
+['h_recojetphi' , 'Reconstructed  AK8 SD Jet \phi (GeV)'],
+['h_recojeteta' , 'Reconstructed  AK8 SD Jet \eta (GeV)'],
+['h_recojetmass' , 'Reconstructed  AK8 SD Jet Mass (GeV)'],
+
+
 ['drGenReco' , ' \Delta R(genJet,recoJet) '],
 ['drGenGroomed' , ' \Delta R(genJet,recoSDJet) ']
 
@@ -75,7 +98,8 @@ for k1 in dirList:
   for h in hList:
     #print "hist name is "
     hname =  h.ReadObj().GetName()
-    if 'response' in hname : continue 
+    if 'response' in hname : continue
+    if 'inning' in hname : continue  
     for t in titles :
         if t[0] in hname :
             title = t[1]
@@ -122,10 +146,10 @@ if not options.MC :
 if options.MC :
     for name, hist in mhists.iteritems() :
         data = None
-
+       
         #print hist
         #Apply scaling calculated above
-        hist[0].Scale(w)
+        #hist[0].Scale(w)
         ROOT.gStyle.SetOptStat(000000)
 
         # create the MC stack for the plot
@@ -148,6 +172,6 @@ if options.MC :
         #    rangexs = [-5,5]
 
         #print "Now plotting histogram {} with x range {}".format(name, rangexs)
-        newcan = printPlot("default", "plots", xtitle, name ,rangexs, y_max_scale, data , hist[0], Stack ) 
+        newcan = printPlot("94XNANOrecluster_ZplusJetSkim", "zjetsplots", xtitle, name ,rangexs, y_max_scale, data , hist[0], Stack ) 
         cans.append(newcan)
 
